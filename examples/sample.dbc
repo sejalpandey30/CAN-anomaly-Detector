@@ -1,0 +1,12 @@
+; Placeholder DBC
+; Replace this file with a real .dbc file provided for your vehicle
+
+NS_:
+	NewSymbols
+
+BS_:
+
+BU_:
+
+BO_ 512 EXAMPLE: 8 ExampleMsg
+ SG_ ExampleSignal : 0|8@1+ (1,0) [0|255] ""  Vector__XXX

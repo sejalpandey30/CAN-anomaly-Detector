@@ -1,0 +1,13 @@
+# Example logical rules for CAN anomaly detection
+- name: speed_impossible_with_engine_off
+  description: "Vehicle speed > 0 while EngineRunning == 0"
+  when:
+    - message_id: 0x200
+      signal: VehicleSpeed
+    - message_id: 0x201
+      signal: EngineRunning
+  condition: "VehicleSpeed > 0 and EngineRunning == 0"
+  severity: High
+  possible_causes:
+    - "Sensor stuck at old value or replay attack"
+    - "Incorrect decoding/scaling"

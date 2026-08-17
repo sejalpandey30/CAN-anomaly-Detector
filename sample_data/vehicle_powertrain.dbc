@@ -1,0 +1,59 @@
+VERSION "1.0"
+
+NS_ :
+	NS_DESC_
+	CM_
+	BA_DEF_
+	BA_
+	VAL_
+	CAT_MACRO_
+	CAT_
+	FILTER
+	BA_DEF_DEF_
+	EV_DATA_
+	ENVDATA_
+	CL_
+
+BS_:
+
+BU_: Engine_ECU Transmission_ECU ABS_ECU BCM Steering_ECU BMS_ECU
+
+BO_ 256 Engine_Data: 8 Engine_ECU
+ SG_ Engine_Speed : 0|16@1+ (0.25,0) [0|7000] "rpm" ABS_ECU,Transmission_ECU
+ SG_ Throttle_Pedal_Pct : 16|8@1+ (0.4,0) [0|100] "%" ABS_ECU
+ SG_ Engine_Temp : 24|8@1+ (1,-40) [-40|125] "degC" BCM
+ SG_ Alive_Counter : 32|4@1+ (1,0) [0|15] "" Vector__XXX
+
+BO_ 257 Transmission_Data: 8 Transmission_ECU
+ SG_ Gear_Position : 0|4@1+ (1,0) [0|6] "" Engine_ECU,ABS_ECU
+ SG_ Clutch_State : 4|4@1+ (1,0) [0|3] "" Engine_ECU
+
+BO_ 258 ABS_Brake_Data: 8 ABS_ECU
+ SG_ Vehicle_Speed : 0|16@1+ (0.01,0) [0|250] "km/h" Engine_ECU,Transmission_ECU,BCM
+ SG_ Brake_Pedal_Pct : 16|8@1+ (0.4,0) [0|100] "%" Engine_ECU
+ SG_ Brake_Pressure : 24|16@1+ (0.1,0) [0|200] "bar" Engine_ECU
+
+BO_ 512 BCM_Body_Data: 8 BCM
+ SG_ Door_State : 0|2@1+ (1,0) [0|3] "" Vector__XXX
+ SG_ Headlight_State : 2|2@1+ (1,0) [0|3] "" Vector__XXX
+
+BO_ 513 Steering_Data: 8 Steering_ECU
+ SG_ Steering_Angle : 0|16@0- (0.1,0) [-720|720] "deg" ABS_ECU
+ SG_ Steering_Torque : 16|16@0- (0.01,0) [-20|20] "Nm" ABS_ECU
+
+BO_ 768 EV_Battery_Data: 8 BMS_ECU
+ SG_ Battery_SOC : 0|8@1+ (0.5,0) [0|100] "%" BCM
+ SG_ Charger_Connected : 8|2@1+ (1,0) [0|3] "" BCM
+
+BA_DEF_ BO_ "GenMsgCycleTime" INT 0 10000;
+BA_DEF_DEF_ "GenMsgCycleTime" 0;
+
+BA_ "GenMsgCycleTime" BO_ 256 10;
+BA_ "GenMsgCycleTime" BO_ 257 20;
+BA_ "GenMsgCycleTime" BO_ 258 10;
+BA_ "GenMsgCycleTime" BO_ 512 100;
+BA_ "GenMsgCycleTime" BO_ 513 10;
+BA_ "GenMsgCycleTime" BO_ 768 50;
+
+VAL_ 257 Gear_Position 0 "PARK" 1 "REVERSE" 2 "NEUTRAL" 3 "DRIVE" 4 "SPORT" ;
+VAL_ 512 Door_State 0 "CLOSED" 1 "OPEN" ;

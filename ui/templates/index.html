@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAN Bus Cybersecurity & Signal Integrity Dashboard</title>
+    <style>
+        :root {
+            --bg-dark: #0b0f19;
+            --bg-card: #151c2c;
+            --bg-card-border: #232d42;
+            --accent-cyan: #06b6d4;
+            --accent-blue: #3b82f6;
+            --critical-red: #ef4444;
+            --high-orange: #f97316;
+            --medium-yellow: #eab308;
+            --low-green: #10b981;
+            --text-primary: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-primary); padding: 20px; line-height: 1.5; }
+
+        .top-navbar { display: flex; justify-content: space-between; align-items: center; background: var(--bg-card); border: 1px solid var(--bg-card-border); border-radius: 12px; padding: 16px 24px; margin-bottom: 20px; box-shadow: 0 4px 25px rgba(0,0,0,0.4); }
+        .logo-section { display: flex; align-items: center; gap: 12px; }
+        .logo-badge { background: linear-gradient(135deg, #06b6d4, #3b82f6); padding: 8px 14px; border-radius: 8px; font-weight: 800; font-size: 14px; color: #fff; letter-spacing: 1px; }
+        .logo-title { font-size: 20px; font-weight: 700; background: linear-gradient(90deg, #f8fafc, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .control-panel { background: var(--bg-card); border: 1px solid var(--bg-card-border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+        .control-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; align-items: end; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group label { font-size: 12px; font-weight: 600; text-transform: uppercase; color: var(--text-muted); }
+        .select-input, .file-input { background: #0b0f19; border: 1px solid var(--bg-card-border); color: #fff; padding: 10px 14px; border-radius: 8px; font-size: 13px; outline: none; }
+        .btn-analyze { background: linear-gradient(135deg, #06b6d4, #3b82f6); color: #fff; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 14px; transition: all 0.2s; }
+        .btn-analyze:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(6,182,212,0.4); }
+
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px; }
+        .kpi-card { background: var(--bg-card); border: 1px solid var(--bg-card-border); border-radius: 12px; padding: 18px; }
+        .kpi-label { font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.5px; }
+        .kpi-value { font-size: 26px; font-weight: 800; color: #fff; margin-top: 4px; }
+        .kpi-subtext { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 20px; }
+        @media (max-width: 1024px) { .dashboard-grid { grid-template-columns: 1fr; } }
+
+        .card { background: var(--bg-card); border: 1px solid var(--bg-card-border); border-radius: 12px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .card-title { font-size: 16px; font-weight: 700; color: #fff; }
+
+        .chart-box { position: relative; height: 320px; width: 100%; }
+
+        /* Digital Gauges Simulator Panel */
+        .gauge-container { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; text-align: center; }
+        .gauge-box { background: #0b0f19; border: 1px solid var(--bg-card-border); border-radius: 10px; padding: 14px; }
+        .gauge-val { font-size: 22px; font-weight: 800; color: var(--accent-cyan); }
+        .gauge-lbl { font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-top: 2px; }
+
+        /* Simulation Controls */
+        .playback-bar { display: flex; gap: 10px; margin-top: 14px; align-items: center; }
+        .btn-play { background: var(--accent-cyan); color: #0b0f19; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 700; cursor: pointer; }
+
+        /* Anomaly Table */
+        .table-controls { display: flex; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+        .search-box { flex: 1; min-width: 200px; background: #0b0f19; border: 1px solid var(--bg-card-border); color: #fff; padding: 8px 12px; border-radius: 6px; font-size: 13px; }
+        
+        table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
+        th { background: #0b0f19; color: var(--text-muted); padding: 10px 14px; border-bottom: 2px solid var(--bg-card-border); text-transform: uppercase; font-size: 11px; font-weight: 700; }
+        td { padding: 12px 14px; border-bottom: 1px solid var(--bg-card-border); vertical-align: top; }
+        tr:hover { background: rgba(255,255,255,0.02); }
+
+        .tag { padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 800; display: inline-block; }
+        .tag-CRITICAL { background: rgba(239,68,68,0.2); color: var(--critical-red); border: 1px solid var(--critical-red); }
+        .tag-HIGH { background: rgba(249,115,22,0.2); color: var(--high-orange); border: 1px solid var(--high-orange); }
+        .tag-MEDIUM { background: rgba(234,179,8,0.2); color: var(--medium-yellow); border: 1px solid var(--medium-yellow); }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <div class="top-navbar">
+        <div class="logo-section">
+            <div class="logo-badge">PS-S01</div>
+            <div>
+                <div class="logo-title">CAN Bus Cybersecurity & Signal Integrity Analyzer</div>
+                <div style="font-size: 12px; color: var(--text-muted);">PC-Based Offline Automotive Diagnostics & Threat Detection System</div>
+            </div>
+        </div>
+        <div>
+            <span style="font-size: 12px; color: var(--low-green); font-weight: 600;">● 100% OFFLINE ENGINE ACTIVE</span>
+        </div>
+    </div>
+
+    <!-- Control Panel -->
+    <div class="control-panel">
+        <form id="analyzeForm" enctype="multipart/form-data" onsubmit="runAnalysis(event)">
+            <div class="control-grid">
+                <div class="form-group">
+                    <label>Select Sample CAN Log File</label>
+                    <select id="sampleLogSelect" name="sample_log" class="select-input">
+                        <option value="07_master_cyberattack_demo.log">07_master_cyberattack_demo.log (Master Evaluation Suite)</option>
+                        <option value="01_normal_driving.log">01_normal_driving.log (Clean Baseline)</option>
+                        <option value="02_out_of_range.log">02_out_of_range.log (Out of Range Anomaly)</option>
+                        <option value="03_dos_flooding.log">03_dos_flooding.log (DoS Flooding Attack)</option>
+                        <option value="04_contradiction.log">04_contradiction.log (Logical Contradiction Attack)</option>
+                        <option value="05_ecu_timeout.log">05_ecu_timeout.log (ECU Timeout / Missing Message)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>OR Upload Custom .log / .trc / .csv File</label>
+                    <input type="file" name="log_file" accept=".log,.asc,.trc,.csv" class="file-input">
+                </div>
+                <div class="form-group">
+                    <label>DBC Database File</label>
+                    <select id="sampleDbcSelect" name="sample_dbc" class="select-input">
+                        <option value="vehicle_powertrain.dbc">vehicle_powertrain.dbc (Default Powertrain DBC)</option>
+                    </select>
+                </div>
+                <div>
+                    <button type="submit" class="btn-analyze">▶ RUN ANOMALY DETECTION</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- KPI Summary Section -->
+    <div class="kpi-grid">
+        <div class="kpi-card">
+            <div class="kpi-label">Total CAN Frames</div>
+            <div class="kpi-value" id="kpiFrames">--</div>
+            <div class="kpi-subtext" id="kpiDuration">-- sec duration</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Active CAN IDs</div>
+            <div class="kpi-value" id="kpiUniqueIds">--</div>
+            <div class="kpi-subtext">Transmitting ECU Nodes</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Detected Anomalies</div>
+            <div class="kpi-value" id="kpiAnomalies" style="color: var(--critical-red);">--</div>
+            <div class="kpi-subtext" id="kpiCriticalCount">-- Critical / High</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">Bus Load Status</div>
+            <div class="kpi-value" id="kpiBusLoad" style="color: var(--accent-cyan);">NORMAL</div>
+            <div class="kpi-subtext">Offline Signal Integrity Validated</div>
+        </div>
+    </div>
+
+    <!-- Main Dashboard Grid -->
+    <div class="dashboard-grid">
+        
+        <!-- Left: Signal Timeline Chart -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Decoded Physical Signal Timeline</div>
+                <div style="font-size: 12px; color: var(--text-muted);">Synced multi-signal telemetry graph</div>
+            </div>
+            <div class="chart-box">
+                <canvas id="signalChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Right: Real-Time Gauge Simulator -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Live Instrument Cluster Simulation</div>
+            </div>
+            <div class="gauge-container">
+                <div class="gauge-box">
+                    <div class="gauge-val" id="gaugeSpeed">0.0</div>
+                    <div class="gauge-lbl">Speed (km/h)</div>
+                </div>
+                <div class="gauge-box">
+                    <div class="gauge-val" id="gaugeRpm">0</div>
+                    <div class="gauge-lbl">Engine (RPM)</div>
+                </div>
+                <div class="gauge-box">
+                    <div class="gauge-val" id="gaugeBrake">0.0</div>
+                    <div class="gauge-lbl">Brake (%)</div>
+                </div>
+                <div class="gauge-box">
+                    <div class="gauge-val" id="gaugeGear">PARK</div>
+                    <div class="gauge-lbl">Transmission</div>
+                </div>
+            </div>
+            
+            <div class="playback-bar">
+                <button class="btn-play" onclick="togglePlayback()">▶ PLAY SIMULATION</button>
+                <div style="font-size: 12px; color: var(--text-muted);" id="playbackTime">t = 0.00s</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Anomaly Table Card -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">Cybersecurity Anomaly Trace & Root Cause Analysis</div>
+        </div>
+
+        <div class="table-controls">
+            <input type="text" id="tableSearch" class="search-box" placeholder="Search by Signal Name, Frame ID, Category, or Diagnosis..." onkeyup="filterAnomalies()">
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 80px;">Time (s)</th>
+                    <th style="width: 100px;">Frame ID</th>
+                    <th style="width: 140px;">Signal / Field</th>
+                    <th style="width: 180px;">Anomaly Category</th>
+                    <th style="width: 90px;">Severity</th>
+                    <th>Diagnosis Summary</th>
+                    <th>Possible Root Causes</th>
+                </tr>
+            </thead>
+            <tbody id="anomalyTbody">
+                <tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 24px;">Click 'Run Anomaly Detection' to evaluate CAN log files.</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        let currentAnomalies = [];
+        let signalSeriesData = {};
+        let chartInstance = null;
+        let isPlaying = false;
+        let playbackInterval = null;
+        let currentPlaybackTime = 0;
+
+        function runAnalysis(e) {
+            if (e) e.preventDefault();
+            const form = document.getElementById('analyzeForm');
+            const formData = new FormData(form);
+
+            fetch('/api/analyze', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    alert("Analysis Error: " + data.error);
+                    return;
+                }
+                updateDashboard(data);
+            })
+            .catch(err => alert("Server error: " + err));
+        }
+
+        function updateDashboard(data) {
+            const meta = data.metadata;
+            currentAnomalies = data.anomalies;
+            signalSeriesData = data.signal_series;
+
+            document.getElementById('kpiFrames').innerText = meta.total_frames.toLocaleString();
+            document.getElementById('kpiDuration').innerText = meta.duration_seconds + " sec duration";
+            document.getElementById('kpiUniqueIds').innerText = meta.unique_ids_count;
+            document.getElementById('kpiAnomalies').innerText = meta.anomaly_count;
+
+            const critCount = currentAnomalies.filter(a => a.severity === 'CRITICAL' || a.severity === 'HIGH').length;
+            document.getElementById('kpiCriticalCount').innerText = `${critCount} Critical / High Threats`;
+
+            renderTable(currentAnomalies);
+            renderSignalChart(signalSeriesData);
+        }
+
+        function renderTable(anomalies) {
+            const tbody = document.getElementById('anomalyTbody');
+            tbody.innerHTML = '';
+
+            if (anomalies.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--low-green); padding: 24px;">✓ Clean CAN Bus Trace: No cybersecurity anomalies detected.</td></tr>';
+                return;
+            }
+
+            anomalies.forEach(a => {
+                const tr = document.createElement('tr');
+                const causes = Array.isArray(a.possible_causes) ? a.possible_causes.join('<br>• ') : a.possible_causes;
+                tr.innerHTML = `
+                    <td><strong>${a.timestamp.toFixed(4)}</strong></td>
+                    <td><code>${a.frame_id}</code><br><small style="color:var(--text-muted);">${a.frame_name}</small></td>
+                    <td><strong>${a.affected_signal}</strong></td>
+                    <td>${a.category}</td>
+                    <td><span class="tag tag-${a.severity}">${a.severity}</span></td>
+                    <td>
+                        <div>${a.diagnosis}</div>
+                        <div style="font-size:11px; color:var(--text-muted); margin-top:3px;">Measured: <code>${a.value}</code> | Expected: <code>${a.expected}</code></div>
+                    </td>
+                    <td style="font-size:12px; color:var(--text-muted);">• ${causes}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterAnomalies() {
+            const query = document.getElementById('tableSearch').value.toLowerCase();
+            const filtered = currentAnomalies.filter(a => 
+                a.affected_signal.toLowerCase().includes(query) ||
+                a.frame_id.toLowerCase().includes(query) ||
+                a.category.toLowerCase().includes(query) ||
+                a.diagnosis.toLowerCase().includes(query)
+            );
+            renderTable(filtered);
+        }
+
+        function renderSignalChart(seriesDict) {
+            const ctx = document.getElementById('signalChart').getContext('2d');
+            if (chartInstance) chartInstance.destroy();
+
+            const colors = ["#06b6d4", "#10b981", "#eab308", "#ef4444", "#3b82f6", "#818cf8"];
+            const keySignals = ["Vehicle_Speed", "Engine_Speed", "Brake_Pedal_Pct", "Throttle_Pedal_Pct"].filter(s => seriesDict[s]);
+            const signalsToPlot = keySignals.length > 0 ? keySignals : Object.keys(seriesDict).slice(0, 4);
+
+            const datasets = signalsToPlot.map((sig, idx) => ({
+                label: sig,
+                data: seriesDict[sig] || [],
+                borderColor: colors[idx % colors.length],
+                borderWidth: 2,
+                fill: false,
+                tension: 0.1,
+                pointRadius: 0
+            }));
+
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: { datasets: datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { type: 'linear', position: 'bottom', title: { display: true, text: 'Timestamp (s)', color: '#94a3b8' }, grid: { color: '#232d42' }, ticks: { color: '#94a3b8' } },
+                        y: { title: { display: true, text: 'Value', color: '#94a3b8' }, grid: { color: '#232d42' }, ticks: { color: '#94a3b8' } }
+                    },
+                    plugins: { legend: { labels: { color: '#f8fafc' } } }
+                }
+            });
+        }
+
+        function togglePlayback() {
+            if (isPlaying) {
+                clearInterval(playbackInterval);
+                isPlaying = false;
+                document.querySelector('.btn-play').innerText = "▶ PLAY SIMULATION";
+            } else {
+                isPlaying = true;
+                document.querySelector('.btn-play').innerText = "⏸ PAUSE";
+                currentPlaybackTime = 0;
+                playbackInterval = setInterval(updatePlaybackStep, 100);
+            }
+        }
+
+        function updatePlaybackStep() {
+            currentPlaybackTime += 0.1;
+            document.getElementById('playbackTime').innerText = `t = ${currentPlaybackTime.toFixed(2)}s`;
+
+            // Update gauges from series dict
+            if (signalSeriesData["Vehicle_Speed"]) {
+                const pt = signalSeriesData["Vehicle_Speed"].find(p => p.x >= currentPlaybackTime);
+                if (pt) document.getElementById('gaugeSpeed').innerText = pt.y.toFixed(1);
+            }
+            if (signalSeriesData["Engine_Speed"]) {
+                const pt = signalSeriesData["Engine_Speed"].find(p => p.x >= currentPlaybackTime);
+                if (pt) document.getElementById('gaugeRpm').innerText = Math.round(pt.y);
+            }
+            if (signalSeriesData["Brake_Pedal_Pct"]) {
+                const pt = signalSeriesData["Brake_Pedal_Pct"].find(p => p.x >= currentPlaybackTime);
+                if (pt) document.getElementById('gaugeBrake').innerText = pt.y.toFixed(1);
+            }
+
+            if (currentPlaybackTime > 10.0) {
+                togglePlayback();
+            }
+        }
+
+        // Run default analysis on load
+        window.onload = function() {
+            runAnalysis();
+        };
+    </script>
+</body>
+</html>

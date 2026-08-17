@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAN Bus Cybersecurity & Signal Integrity Report</title>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-blue: #38bdf8;
+            --critical-red: #ef4444;
+            --high-orange: #f97316;
+            --medium-yellow: #eab308;
+            --low-green: #22c55e;
+            --border-color: #334155;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; }
+        body { background-color: var(--bg-primary); color: var(--text-main); padding: 24px; line-height: 1.5; }
+        
+        .header { display: flex; justify-content: space-between; align-items: center; background: var(--bg-secondary); padding: 20px 28px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+        .header h1 { font-size: 24px; font-weight: 700; color: #fff; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header .subtitle { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+        .badge { padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .badge-critical { background: rgba(239,68,68,0.2); color: var(--critical-red); border: 1px solid var(--critical-red); }
+        .badge-high { background: rgba(249,115,22,0.2); color: var(--high-orange); border: 1px solid var(--high-orange); }
+        .badge-clean { background: rgba(34,197,94,0.2); color: var(--low-green); border: 1px solid var(--low-green); }
+
+        .grid-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
+        .stat-card { background: var(--bg-card); padding: 20px; border-radius: 10px; border: 1px solid var(--border-color); }
+        .stat-card .label { font-size: 12px; text-transform: uppercase; color: var(--text-muted); font-weight: 600; }
+        .stat-card .value { font-size: 28px; font-weight: 700; color: #fff; margin-top: 6px; }
+        .stat-card .subtext { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+        .card { background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color); padding: 24px; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .card-title { font-size: 18px; font-weight: 600; margin-bottom: 16px; color: #fff; display: flex; align-items: center; justify-content: space-between; }
+
+        .chart-container { position: relative; height: 350px; width: 100%; }
+
+        .table-controls { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+        .search-input, .select-filter { background: #0f172a; border: 1px solid var(--border-color); color: #fff; padding: 10px 14px; border-radius: 6px; font-size: 14px; outline: none; }
+        .search-input { flex: 1; min-width: 200px; }
+
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
+        th { background: #0f172a; color: var(--text-muted); font-weight: 600; padding: 12px 16px; border-bottom: 2px solid var(--border-color); text-transform: uppercase; font-size: 12px; }
+        td { padding: 14px 16px; border-bottom: 1px solid var(--border-color); vertical-align: top; }
+        tr:hover { background: rgba(255,255,255,0.03); }
+
+        .tag-sev { display: inline-block; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 11px; }
+        .tag-CRITICAL { background: var(--critical-red); color: #fff; }
+        .tag-HIGH { background: var(--high-orange); color: #fff; }
+        .tag-MEDIUM { background: var(--medium-yellow); color: #000; }
+        .tag-LOW { background: var(--low-green); color: #fff; }
+
+        .btn { background: var(--accent-blue); color: #0f172a; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px; text-decoration: none; display: inline-block; }
+        .btn:hover { opacity: 0.9; }
+
+        @media print {
+            body { background: #fff; color: #000; }
+            .card, .header, .stat-card { background: #fff; border: 1px solid #ccc; color: #000; }
+            .header h1 { -webkit-text-fill-color: #000; }
+            .table-controls, .btn { display: none; }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <div class="header">
+        <div>
+            <h1>PS-S01 CAN Bus Cybersecurity & Signal Integrity Analyzer</h1>
+            <div class="subtitle">Log: <strong>07_master_cyberattack_demo.log</strong> | DBC: <strong>vehicle_powertrain.dbc</strong></div>
+        </div>
+        <div>
+            <span class="badge badge-critical">Threats Detected</span>
+            <button class="btn" style="margin-left: 12px;" onclick="window.print()">Export PDF / Print</button>
+        </div>
+    </div>
+
+    <div class="grid-stats">
+        <div class="stat-card">
+            <div class="label">Total Frames Processed</div>
+            <div class="value">72</div>
+            <div class="subtext">Across 0.51 seconds (141.2 frames/sec)</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">Unique Frame IDs</div>
+            <div class="value">4</div>
+            <div class="subtext">Transmitting ECUs active</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">Total Anomalies Detected</div>
+            <div class="value" style="color: var(--critical-red);">38</div>
+            <div class="subtext">Flagged by offline security engine</div>
+        </div>
+        <div class="stat-card">
+            <div class="label">Critical / High Severity</div>
+            <div class="value" style="color: var(--high-orange);">37</div>
+            <div class="subtext">34 Critical | 3 High</div>
+        </div>
+    </div>
+
+    <!-- Timeline Visualizer Card -->
+    <div class="card">
+        <div class="card-title">
+            <span>Decoded Signal Timeline & Anomaly Marker Overlays</span>
+            <span style="font-size: 12px; color: var(--text-muted); font-weight: normal;">Showing aligned multi-signal physical telemetry</span>
+        </div>
+        <div class="chart-container">
+            <canvas id="timelineChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Detailed Anomaly Table Card -->
+    <div class="card">
+        <div class="card-title">
+            <span>Security & Signal Integrity Findings Log</span>
+            <span style="font-size: 13px; color: var(--text-muted);">38 Total Anomalies Flagged</span>
+        </div>
+        
+        <div class="table-controls">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search by Signal Name, Frame ID, Category, or Diagnosis..." onkeyup="filterTable()">
+            <select id="sevFilter" class="select-filter" onchange="filterTable()">
+                <option value="ALL">All Severities</option>
+                <option value="CRITICAL">CRITICAL</option>
+                <option value="HIGH">HIGH</option>
+                <option value="MEDIUM">MEDIUM</option>
+                <option value="LOW">LOW</option>
+            </select>
+            <select id="catFilter" class="select-filter" onchange="filterTable()">
+                <option value="ALL">All Categories</option>
+                <option value="Out-of-Range Signal">Out-of-Range Signal</option>
+                <option value="DoS / Message Flooding Attack">DoS / Message Flooding Attack</option>
+                <option value="Timing & Frequency Irregularity">Timing & Frequency Irregularity</option>
+                <option value="Cross-Signal Logical Contradiction">Cross-Signal Logical Contradiction</option>
+                <option value="Missing Message / ECU Timeout">Missing Message / ECU Timeout</option>
+                <option value="Data Corruption / DLC Mismatch">Data Corruption / DLC Mismatch</option>
+            </select>
+        </div>
+
+        <table id="anomalyTable">
+            <thead>
+                <tr>
+                    <th style="width: 90px;">Time (s)</th>
+                    <th style="width: 100px;">Frame ID</th>
+                    <th style="width: 140px;">Signal / Field</th>
+                    <th style="width: 180px;">Category</th>
+                    <th style="width: 90px;">Severity</th>
+                    <th>Diagnosis & Security Risk Analysis</th>
+                    <th>Possible Root Causes</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const anomaliesData = [{"timestamp": 0.4104, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.4106, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.4108, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.411, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.4112, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.4114, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.4116, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.4118, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.412, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.4122, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.4124, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.4126, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.4128, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.413, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.4132, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.4134, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.4136, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.4138, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.414, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.4142, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.4144, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.4146, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.4148, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.415, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.4152, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.4154, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.4156, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.4158, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.416, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Bus Transmission Rate", "category": "DoS / Message Flooding Attack", "severity": "CRITICAL", "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)", "possible_causes": ["Compromised ECU flooding the CAN bus (Denial of Service attack)", "Replay attack continuously resending captured telemetry frames", "ECU bus controller malfunction sending rapid retries"], "value": "Delta = 0.20 ms", "expected": "Nominal = 10.0 ms"}, {"timestamp": 0.466, "frame_id": "0x100", "frame_name": "Engine_Data", "affected_signal": "Engine_Speed", "category": "Out-of-Range Signal", "severity": "CRITICAL", "diagnosis": "Signal 'Engine_Speed' value (16383.75 rpm) exceeds valid DBC bounds [0.0, 7000.0]", "possible_causes": ["Sensor short-circuit or physical hardware fault", "Out-of-range signal injection attack by malicious node", "Corrupted CAN payload frame or scaling offset mismatch"], "value": "16383.75 rpm", "expected": "[0.0, 7000.0] rpm"}, {"timestamp": 0.466, "frame_id": "0x100", "frame_name": "Engine_Data", "affected_signal": "Throttle_Pedal_Pct", "category": "Out-of-Range Signal", "severity": "MEDIUM", "diagnosis": "Signal 'Throttle_Pedal_Pct' value (102.00 %) exceeds valid DBC bounds [0.0, 100.0]", "possible_causes": ["Sensor short-circuit or physical hardware fault", "Out-of-range signal injection attack by malicious node", "Corrupted CAN payload frame or scaling offset mismatch"], "value": "102.00 %", "expected": "[0.0, 100.0] %"}, {"timestamp": 0.466, "frame_id": "0x100", "frame_name": "Engine_Data", "affected_signal": "Engine_Temp", "category": "Out-of-Range Signal", "severity": "HIGH", "diagnosis": "Signal 'Engine_Temp' value (215.00 degC) exceeds valid DBC bounds [-40.0, 125.0]", "possible_causes": ["Sensor short-circuit or physical hardware fault", "Out-of-range signal injection attack by malicious node", "Corrupted CAN payload frame or scaling offset mismatch"], "value": "215.00 degC", "expected": "[-40.0, 125.0] degC"}, {"timestamp": 0.466, "frame_id": "0x100", "frame_name": "Engine_Data", "affected_signal": "Frame DLC", "category": "Data Corruption / DLC Mismatch", "severity": "HIGH", "diagnosis": "DLC Mismatch: Frame 0x100 payload length is 4 bytes, but DBC spec expects 8 bytes", "possible_causes": ["Spoofed CAN frame injected by non-conforming ECU", "Truncated message payload or protocol version mismatch", "Corrupted log file line"], "value": "DLC = 4", "expected": "DLC = 8"}, {"timestamp": 0.516, "frame_id": "0x100", "frame_name": "Engine_Data", "affected_signal": "Alive_Counter", "category": "Counter / Sequence Error", "severity": "HIGH", "diagnosis": "Sequence Counter Error in 'Alive_Counter': Counter jumped from 0 to 2 (expected 1)", "possible_causes": ["Dropped / missing frames on CAN bus", "Out-of-order frame injection by attacker node", "ECU reset or counter initialization sync loss"], "value": "Counter = 2", "expected": "Counter = 1"}, {"timestamp": 0.516, "frame_id": "0x100", "frame_name": "Engine_Data", "affected_signal": "Vehicle Motion with Engine Off", "category": "Cross-Signal Logical Contradiction", "severity": "CRITICAL", "diagnosis": "Logical Contradiction Rule Violation: 'Vehicle Motion with Engine Off' - Physically impossible vehicle movement: Speed reported > 10 km/h with Engine OFF", "possible_causes": ["Engine ECU message spoofing attack", "Wheel speed sensor failure / malicious injection", "CAN bus replay attack of speed telemetry frame"], "value": "State: Engine_Speed=0.0, Throttle_Pedal_Pct=0.0, Vehicle_Speed=45.0, Brake_Pedal_Pct=0.0", "expected": "Valid Physical State Vector"}, {"timestamp": 0.518, "frame_id": "0x102", "frame_name": "ABS_Brake_Data", "affected_signal": "Vehicle Motion with Engine Off", "category": "Cross-Signal Logical Contradiction", "severity": "CRITICAL", "diagnosis": "Logical Contradiction Rule Violation: 'Vehicle Motion with Engine Off' - Physically impossible vehicle movement: Speed reported > 10 km/h with Engine OFF", "possible_causes": ["Engine ECU message spoofing attack", "Wheel speed sensor failure / malicious injection", "CAN bus replay attack of speed telemetry frame"], "value": "State: Engine_Speed=0.0, Throttle_Pedal_Pct=0.0, Vehicle_Speed=85.0, Brake_Pedal_Pct=0.0", "expected": "Valid Physical State Vector"}, {"timestamp": 0.52, "frame_id": "0x101", "frame_name": "Transmission_Data", "affected_signal": "Vehicle Motion with Engine Off", "category": "Cross-Signal Logical Contradiction", "severity": "CRITICAL", "diagnosis": "Logical Contradiction Rule Violation: 'Vehicle Motion with Engine Off' - Physically impossible vehicle movement: Speed reported > 10 km/h with Engine OFF", "possible_causes": ["Engine ECU message spoofing attack", "Wheel speed sensor failure / malicious injection", "CAN bus replay attack of speed telemetry frame"], "value": "State: Engine_Speed=0.0, Throttle_Pedal_Pct=0.0, Vehicle_Speed=85.0, Brake_Pedal_Pct=0.0", "expected": "Valid Physical State Vector"}, {"timestamp": 0.52, "frame_id": "0x101", "frame_name": "Transmission_Data", "affected_signal": "Transmission in PARK while Moving", "category": "Cross-Signal Logical Contradiction", "severity": "CRITICAL", "diagnosis": "Logical Contradiction Rule Violation: 'Transmission in PARK while Moving' - Physical contradiction: Gear reported in PARK (0) while vehicle speed > 5 km/h", "possible_causes": ["Transmission Control Module (TCM) signal spoofing", "Faulty gear selector position sensor", "False status message injection by compromised ECU"], "value": "State: Engine_Speed=0.0, Throttle_Pedal_Pct=0.0, Vehicle_Speed=85.0, Brake_Pedal_Pct=0.0", "expected": "Valid Physical State Vector"}];
+        const chartDatasets = [{"label": "Vehicle_Speed", "data": [{"x": 0.01, "y": 0.0}, {"x": 0.02, "y": 0.4}, {"x": 0.03, "y": 0.8}, {"x": 0.04, "y": 1.2}, {"x": 0.05, "y": 1.6}, {"x": 0.06, "y": 2.0}, {"x": 0.07, "y": 2.4}, {"x": 0.08, "y": 2.8}, {"x": 0.09, "y": 3.2}, {"x": 0.1, "y": 3.6}, {"x": 0.11, "y": 4.0}, {"x": 0.12, "y": 4.4}, {"x": 0.13, "y": 4.8}, {"x": 0.14, "y": 5.2}, {"x": 0.4102, "y": 45.0}, {"x": 0.4104, "y": 45.0}, {"x": 0.4106, "y": 45.0}, {"x": 0.4108, "y": 45.0}, {"x": 0.411, "y": 45.0}, {"x": 0.4112, "y": 45.0}, {"x": 0.4114, "y": 45.0}, {"x": 0.4116, "y": 45.0}, {"x": 0.4118, "y": 45.0}, {"x": 0.412, "y": 45.0}, {"x": 0.4122, "y": 45.0}, {"x": 0.4124, "y": 45.0}, {"x": 0.4126, "y": 45.0}, {"x": 0.4128, "y": 45.0}, {"x": 0.413, "y": 45.0}, {"x": 0.4132, "y": 45.0}, {"x": 0.4134, "y": 45.0}, {"x": 0.4136, "y": 45.0}, {"x": 0.4138, "y": 45.0}, {"x": 0.414, "y": 45.0}, {"x": 0.4142, "y": 45.0}, {"x": 0.4144, "y": 45.0}, {"x": 0.4146, "y": 45.0}, {"x": 0.4148, "y": 45.0}, {"x": 0.415, "y": 45.0}, {"x": 0.4152, "y": 45.0}, {"x": 0.4154, "y": 45.0}, {"x": 0.4156, "y": 45.0}, {"x": 0.4158, "y": 45.0}, {"x": 0.416, "y": 45.0}, {"x": 0.518, "y": 85.0}], "borderColor": "#4e73df", "borderWidth": 2, "fill": false, "tension": 0.1, "pointRadius": 0}, {"label": "Engine_Speed", "data": [{"x": 0.01, "y": 800.0}, {"x": 0.02, "y": 810.0}, {"x": 0.03, "y": 820.0}, {"x": 0.04, "y": 830.0}, {"x": 0.05, "y": 840.0}, {"x": 0.06, "y": 850.0}, {"x": 0.07, "y": 860.0}, {"x": 0.08, "y": 870.0}, {"x": 0.09, "y": 880.0}, {"x": 0.1, "y": 890.0}, {"x": 0.11, "y": 900.0}, {"x": 0.12, "y": 910.0}, {"x": 0.13, "y": 920.0}, {"x": 0.14, "y": 930.0}, {"x": 0.15, "y": 940.0}, {"x": 0.466, "y": 16383.75}, {"x": 0.516, "y": 0.0}], "borderColor": "#1cc88a", "borderWidth": 2, "fill": false, "tension": 0.1, "pointRadius": 0}, {"label": "Brake_Pedal_Pct", "data": [{"x": 0.01, "y": 0.0}, {"x": 0.02, "y": 0.0}, {"x": 0.03, "y": 0.0}, {"x": 0.04, "y": 0.0}, {"x": 0.05, "y": 0.0}, {"x": 0.06, "y": 0.0}, {"x": 0.07, "y": 0.0}, {"x": 0.08, "y": 0.0}, {"x": 0.09, "y": 0.0}, {"x": 0.1, "y": 0.0}, {"x": 0.11, "y": 0.0}, {"x": 0.12, "y": 0.0}, {"x": 0.13, "y": 0.0}, {"x": 0.14, "y": 0.0}, {"x": 0.4102, "y": 0.0}, {"x": 0.4104, "y": 0.0}, {"x": 0.4106, "y": 0.0}, {"x": 0.4108, "y": 0.0}, {"x": 0.411, "y": 0.0}, {"x": 0.4112, "y": 0.0}, {"x": 0.4114, "y": 0.0}, {"x": 0.4116, "y": 0.0}, {"x": 0.4118, "y": 0.0}, {"x": 0.412, "y": 0.0}, {"x": 0.4122, "y": 0.0}, {"x": 0.4124, "y": 0.0}, {"x": 0.4126, "y": 0.0}, {"x": 0.4128, "y": 0.0}, {"x": 0.413, "y": 0.0}, {"x": 0.4132, "y": 0.0}, {"x": 0.4134, "y": 0.0}, {"x": 0.4136, "y": 0.0}, {"x": 0.4138, "y": 0.0}, {"x": 0.414, "y": 0.0}, {"x": 0.4142, "y": 0.0}, {"x": 0.4144, "y": 0.0}, {"x": 0.4146, "y": 0.0}, {"x": 0.4148, "y": 0.0}, {"x": 0.415, "y": 0.0}, {"x": 0.4152, "y": 0.0}, {"x": 0.4154, "y": 0.0}, {"x": 0.4156, "y": 0.0}, {"x": 0.4158, "y": 0.0}, {"x": 0.416, "y": 0.0}, {"x": 0.518, "y": 0.0}], "borderColor": "#f6c23e", "borderWidth": 2, "fill": false, "tension": 0.1, "pointRadius": 0}, {"label": "Throttle_Pedal_Pct", "data": [{"x": 0.01, "y": 20.0}, {"x": 0.02, "y": 20.0}, {"x": 0.03, "y": 20.0}, {"x": 0.04, "y": 20.0}, {"x": 0.05, "y": 20.0}, {"x": 0.06, "y": 20.0}, {"x": 0.07, "y": 20.0}, {"x": 0.08, "y": 20.0}, {"x": 0.09, "y": 20.0}, {"x": 0.1, "y": 20.0}, {"x": 0.11, "y": 20.0}, {"x": 0.12, "y": 20.0}, {"x": 0.13, "y": 20.0}, {"x": 0.14, "y": 20.0}, {"x": 0.15, "y": 20.0}, {"x": 0.466, "y": 102.0}, {"x": 0.516, "y": 0.0}], "borderColor": "#e74a3b", "borderWidth": 2, "fill": false, "tension": 0.1, "pointRadius": 0}];
+
+        // Render Table
+        function renderTable(data) {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+            if (data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 24px;">No matching anomalies found.</td></tr>';
+                return;
+            }
+            data.forEach(a => {
+                const tr = document.createElement('tr');
+                const causes = Array.isArray(a.possible_causes) ? a.possible_causes.join('<br>• ') : a.possible_causes;
+                tr.innerHTML = `
+                    <td><strong>${a.timestamp.toFixed(4)}</strong></td>
+                    <td><code>${a.frame_id}</code><br><small style="color:var(--text-muted);">${a.frame_name}</small></td>
+                    <td><strong>${a.affected_signal}</strong></td>
+                    <td>${a.category}</td>
+                    <td><span class="tag-sev tag-${a.severity}">${a.severity}</span></td>
+                    <td>
+                        <div>${a.diagnosis}</div>
+                        <div style="font-size:12px; color:var(--text-muted); margin-top:4px;">Measured: <code>${a.value}</code> | Expected: <code>${a.expected}</code></div>
+                    </td>
+                    <td style="font-size:12px; color:var(--text-muted);">• ${causes}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterTable() {
+            const searchStr = document.getElementById('searchInput').value.toLowerCase();
+            const sevVal = document.getElementById('sevFilter').value;
+            const catVal = document.getElementById('catFilter').value;
+
+            const filtered = anomaliesData.filter(a => {
+                const matchSearch = searchStr === '' || 
+                    a.affected_signal.toLowerCase().includes(searchStr) ||
+                    a.frame_id.toLowerCase().includes(searchStr) ||
+                    a.category.toLowerCase().includes(searchStr) ||
+                    a.diagnosis.toLowerCase().includes(searchStr);
+                const matchSev = sevVal === 'ALL' || a.severity === sevVal;
+                const matchCat = catVal === 'ALL' || a.category === catVal;
+                return matchSearch && matchSev && matchCat;
+            });
+            renderTable(filtered);
+        }
+
+        // Render Chart if Chart.js is loaded
+        if (typeof Chart !== 'undefined') {
+            const ctx = document.getElementById('timelineChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    datasets: chartDatasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            title: { display: true, text: 'Timestamp (Seconds)', color: '#94a3b8' },
+                            grid: { color: '#334155' },
+                            ticks: { color: '#94a3b8' }
+                        },
+                        y: {
+                            title: { display: true, text: 'Physical Value', color: '#94a3b8' },
+                            grid: { color: '#334155' },
+                            ticks: { color: '#94a3b8' }
+                        }
+                    },
+                    plugins: {
+                        legend: { labels: { color: '#f8fafc' } },
+                        tooltip: { mode: 'index', intersect: false }
+                    }
+                }
+            });
+        }
+
+        // Initial table load
+        renderTable(anomaliesData);
+    </script>
+</body>
+</html>

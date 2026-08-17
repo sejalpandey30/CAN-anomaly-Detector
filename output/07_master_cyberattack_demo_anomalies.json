@@ -1,0 +1,626 @@
+{
+  "metadata": {
+    "log_file": "sample_data/07_master_cyberattack_demo.log",
+    "dbc_file": "sample_data/vehicle_powertrain.dbc",
+    "total_frames": 72
+  },
+  "summary": {
+    "total_anomalies": 38,
+    "severity_counts": {
+      "CRITICAL": 34,
+      "HIGH": 3,
+      "MEDIUM": 1,
+      "LOW": 0
+    }
+  },
+  "anomalies": [
+    {
+      "timestamp": 0.4104,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.4106,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.4108,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.411,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.4112,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.4114,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.4116,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.4118,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.412,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.4122,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.4124,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.4126,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.4128,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.413,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.4132,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.4134,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.4136,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.4138,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.414,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.4142,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.4144,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.4146,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.4148,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.415,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.4152,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.4154,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.4156,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.4158,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.416,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Bus Transmission Rate",
+      "category": "DoS / Message Flooding Attack",
+      "severity": "CRITICAL",
+      "diagnosis": "DoS Flooding Attack / High-Frequency Burst: Frame 0x102 (ABS_Brake_Data) received with inter-message delta 0.20ms (expected nominal 10.0ms, ratio 0.02)",
+      "possible_causes": [
+        "Compromised ECU flooding the CAN bus (Denial of Service attack)",
+        "Replay attack continuously resending captured telemetry frames",
+        "ECU bus controller malfunction sending rapid retries"
+      ],
+      "value": "Delta = 0.20 ms",
+      "expected": "Nominal = 10.0 ms"
+    },
+    {
+      "timestamp": 0.466,
+      "frame_id": "0x100",
+      "frame_name": "Engine_Data",
+      "affected_signal": "Engine_Speed",
+      "category": "Out-of-Range Signal",
+      "severity": "CRITICAL",
+      "diagnosis": "Signal 'Engine_Speed' value (16383.75 rpm) exceeds valid DBC bounds [0.0, 7000.0]",
+      "possible_causes": [
+        "Sensor short-circuit or physical hardware fault",
+        "Out-of-range signal injection attack by malicious node",
+        "Corrupted CAN payload frame or scaling offset mismatch"
+      ],
+      "value": "16383.75 rpm",
+      "expected": "[0.0, 7000.0] rpm"
+    },
+    {
+      "timestamp": 0.466,
+      "frame_id": "0x100",
+      "frame_name": "Engine_Data",
+      "affected_signal": "Throttle_Pedal_Pct",
+      "category": "Out-of-Range Signal",
+      "severity": "MEDIUM",
+      "diagnosis": "Signal 'Throttle_Pedal_Pct' value (102.00 %) exceeds valid DBC bounds [0.0, 100.0]",
+      "possible_causes": [
+        "Sensor short-circuit or physical hardware fault",
+        "Out-of-range signal injection attack by malicious node",
+        "Corrupted CAN payload frame or scaling offset mismatch"
+      ],
+      "value": "102.00 %",
+      "expected": "[0.0, 100.0] %"
+    },
+    {
+      "timestamp": 0.466,
+      "frame_id": "0x100",
+      "frame_name": "Engine_Data",
+      "affected_signal": "Engine_Temp",
+      "category": "Out-of-Range Signal",
+      "severity": "HIGH",
+      "diagnosis": "Signal 'Engine_Temp' value (215.00 degC) exceeds valid DBC bounds [-40.0, 125.0]",
+      "possible_causes": [
+        "Sensor short-circuit or physical hardware fault",
+        "Out-of-range signal injection attack by malicious node",
+        "Corrupted CAN payload frame or scaling offset mismatch"
+      ],
+      "value": "215.00 degC",
+      "expected": "[-40.0, 125.0] degC"
+    },
+    {
+      "timestamp": 0.466,
+      "frame_id": "0x100",
+      "frame_name": "Engine_Data",
+      "affected_signal": "Frame DLC",
+      "category": "Data Corruption / DLC Mismatch",
+      "severity": "HIGH",
+      "diagnosis": "DLC Mismatch: Frame 0x100 payload length is 4 bytes, but DBC spec expects 8 bytes",
+      "possible_causes": [
+        "Spoofed CAN frame injected by non-conforming ECU",
+        "Truncated message payload or protocol version mismatch",
+        "Corrupted log file line"
+      ],
+      "value": "DLC = 4",
+      "expected": "DLC = 8"
+    },
+    {
+      "timestamp": 0.516,
+      "frame_id": "0x100",
+      "frame_name": "Engine_Data",
+      "affected_signal": "Alive_Counter",
+      "category": "Counter / Sequence Error",
+      "severity": "HIGH",
+      "diagnosis": "Sequence Counter Error in 'Alive_Counter': Counter jumped from 0 to 2 (expected 1)",
+      "possible_causes": [
+        "Dropped / missing frames on CAN bus",
+        "Out-of-order frame injection by attacker node",
+        "ECU reset or counter initialization sync loss"
+      ],
+      "value": "Counter = 2",
+      "expected": "Counter = 1"
+    },
+    {
+      "timestamp": 0.516,
+      "frame_id": "0x100",
+      "frame_name": "Engine_Data",
+      "affected_signal": "Vehicle Motion with Engine Off",
+      "category": "Cross-Signal Logical Contradiction",
+      "severity": "CRITICAL",
+      "diagnosis": "Logical Contradiction Rule Violation: 'Vehicle Motion with Engine Off' - Physically impossible vehicle movement: Speed reported > 10 km/h with Engine OFF",
+      "possible_causes": [
+        "Engine ECU message spoofing attack",
+        "Wheel speed sensor failure / malicious injection",
+        "CAN bus replay attack of speed telemetry frame"
+      ],
+      "value": "State: Engine_Speed=0.0, Throttle_Pedal_Pct=0.0, Vehicle_Speed=45.0, Brake_Pedal_Pct=0.0",
+      "expected": "Valid Physical State Vector"
+    },
+    {
+      "timestamp": 0.518,
+      "frame_id": "0x102",
+      "frame_name": "ABS_Brake_Data",
+      "affected_signal": "Vehicle Motion with Engine Off",
+      "category": "Cross-Signal Logical Contradiction",
+      "severity": "CRITICAL",
+      "diagnosis": "Logical Contradiction Rule Violation: 'Vehicle Motion with Engine Off' - Physically impossible vehicle movement: Speed reported > 10 km/h with Engine OFF",
+      "possible_causes": [
+        "Engine ECU message spoofing attack",
+        "Wheel speed sensor failure / malicious injection",
+        "CAN bus replay attack of speed telemetry frame"
+      ],
+      "value": "State: Engine_Speed=0.0, Throttle_Pedal_Pct=0.0, Vehicle_Speed=85.0, Brake_Pedal_Pct=0.0",
+      "expected": "Valid Physical State Vector"
+    },
+    {
+      "timestamp": 0.52,
+      "frame_id": "0x101",
+      "frame_name": "Transmission_Data",
+      "affected_signal": "Vehicle Motion with Engine Off",
+      "category": "Cross-Signal Logical Contradiction",
+      "severity": "CRITICAL",
+      "diagnosis": "Logical Contradiction Rule Violation: 'Vehicle Motion with Engine Off' - Physically impossible vehicle movement: Speed reported > 10 km/h with Engine OFF",
+      "possible_causes": [
+        "Engine ECU message spoofing attack",
+        "Wheel speed sensor failure / malicious injection",
+        "CAN bus replay attack of speed telemetry frame"
+      ],
+      "value": "State: Engine_Speed=0.0, Throttle_Pedal_Pct=0.0, Vehicle_Speed=85.0, Brake_Pedal_Pct=0.0",
+      "expected": "Valid Physical State Vector"
+    },
+    {
+      "timestamp": 0.52,
+      "frame_id": "0x101",
+      "frame_name": "Transmission_Data",
+      "affected_signal": "Transmission in PARK while Moving",
+      "category": "Cross-Signal Logical Contradiction",
+      "severity": "CRITICAL",
+      "diagnosis": "Logical Contradiction Rule Violation: 'Transmission in PARK while Moving' - Physical contradiction: Gear reported in PARK (0) while vehicle speed > 5 km/h",
+      "possible_causes": [
+        "Transmission Control Module (TCM) signal spoofing",
+        "Faulty gear selector position sensor",
+        "False status message injection by compromised ECU"
+      ],
+      "value": "State: Engine_Speed=0.0, Throttle_Pedal_Pct=0.0, Vehicle_Speed=85.0, Brake_Pedal_Pct=0.0",
+      "expected": "Valid Physical State Vector"
+    }
+  ]
+}

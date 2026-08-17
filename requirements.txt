@@ -1,0 +1,5 @@
+# PS-S01 CAN Bus Data Decoder & Anomaly Detector Dependencies
+# 100% offline runnable with standard Python installation
+Flask>=3.0.0
+jinja2>=3.0.0
+reportlab>=4.0.0

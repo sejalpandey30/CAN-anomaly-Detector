@@ -1,25 +1,80 @@
 # CAN-anomaly-Detector
 
-This branch adds a core offline CAN anomaly detection tool with parsing, DBC decoding, anomaly detection, and reporting.
+A Python-based offline automotive cybersecurity and CAN bus analysis platform for decoding controller-area-network traffic, profiling ECU behavior, and detecting anomalies from .dbc-driven signal data.
 
-Quick start
+## Overview
 
-1. Create a Python virtual environment and install dependencies:
+This project parses raw CAN log files, decodes binary payloads using a DBC database, flags suspicious signal behavior, and reports cyber-physical issues such as:
 
-   python3 -m venv venv
-   source venv/bin/activate
-   pip install -r requirements.txt
+- out-of-range sensor values
+- timing-based flooding and message bursts
+- cross-signal logical contradictions
+- missing message / ECU timeout conditions
+- replay or fuzzing-style traffic patterns
 
-2. Run the analyzer (replace examples/sample.dbc with a real DBC):
+It supports local analysis with both a CLI and a Flask web dashboard, and can export HTML, PDF, CSV, and JSON reports.
 
-   python -m can_anom.main --dbc examples/sample.dbc --log examples/sample_log.csv --out demo_report
+## Features
 
-Files added
-- can_anom/ : core modules (main, parser, decoder, detector, reporter, viz)
-- configs/rules.yaml : example logical rules
-- examples/ : sample log and placeholder DBC
-- requirements.txt
+- Multi-format CAN parsing for .log, .asc, .trc, and .csv files
+- DBC-based decoding with endianness and scaling support
+- ECU behavior profiling and traffic fingerprinting
+- anomaly detection and threat classification engine
+- local web UI at http://127.0.0.1:5000
+- output generation for reporting and downstream analysis
 
-Notes
-- The provided sample.dbc is only a placeholder. Replace it with the real .dbc file for correct decoding.
-- This is the initial implementation covering mandatory requirements (out-of-range, timing, logic rules) and basic reporting. Follow-up improvements (missing message detection, CRC checks, improved parsers, packaging) can be added.
+## Repository Structure
+
+- `app.py` – Flask dashboard
+- `cli.py` – command-line runner
+- `core/` – parsing, decoding, profiling, and threat detection logic
+- `reports/` – console, HTML, PDF, CSV, and JSON export modules
+- `sample_data/` – demo DBC and log files
+- `output/` and `output_demo/` – generated reports
+- `ui/templates/` – dashboard templates
+
+## Quick Start
+
+### 1. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 2. Run the demo analysis
+
+```bash
+python cli.py demo
+```
+
+### 3. Run a custom file analysis
+
+```bash
+python cli.py analyze --dbc sample_data/vehicle_powertrain.dbc --log sample_data/07_master_cyberattack_demo.log --out output
+```
+
+### 4. Launch the local dashboard
+
+```bash
+python app.py
+```
+
+Then open:
+
+```text
+http://127.0.0.1:5000
+```
+
+## Output Formats
+
+The project can generate:
+
+- terminal console summaries
+- interactive HTML reports
+- PDF technical reports
+- CSV telemetry and anomaly logs
+- JSON anomaly exports
+
+## Notes
+
+This repository is intended for offline automotive CAN traffic analysis and research. The included sample data is designed to demonstrate the tool's anomaly detection workflow without requiring a live vehicle connection.

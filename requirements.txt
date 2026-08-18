@@ -3,3 +3,4 @@ pandas>=1.5
 pyyaml
 jinja2
 matplotlib
+gunicorn
